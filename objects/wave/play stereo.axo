@@ -19,7 +19,6 @@
       <attribs/>
       <includes>
          <include>./streamer.h</include>
-         <include>chibios/ext/fatfs/src/ff.h</include>
       </includes>
       <code.declaration><![CDATA[WORKING_AREA(waThreadSD, 800);
    sdReadFilePingpong *stream;
@@ -64,7 +63,7 @@ outlet_end = 0;
         }
      }
      else {
-        for(i=0;i<BUFSIZE;i++) 
+        for(i=0;i<BUFSIZE;i++)
         	outlet_outl[i] = outlet_outr[i]= 0;
         outlet_end = 1;
      }]]></code.krate>

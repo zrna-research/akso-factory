@@ -31,7 +31,7 @@ typedef enum {
 #define SZ_TBL 64
 
 typedef struct {
-  Thread *pThreadSD;
+  thread_t *pThreadSD;
   DWORD clmt[SZ_TBL];
   volatile stream_state pingpong;
   volatile int doSeek;
@@ -48,7 +48,7 @@ typedef struct {
 
 #define __INL __attribute__ ((noinline))
 
-static __INL msg_t ThreadSD(void *arg) {
+static THD_FUNCTION(ThreadSD, arg) {
   volatile FRESULT err;
   UINT bytes_read;
   while (!chThdShouldTerminate()) {
@@ -200,9 +200,6 @@ static __INL msg_t ThreadSD(void *arg) {
     if (err) report_fatfs_error(err,&s->filename[0]);
   }
 //  LogTextMessage("streamer thread : terminated");
-
-
-  return (msg_t)0;
 }
 
 __INL void sdOpenStream(sdReadFilePingpong * s, const char *fn) {

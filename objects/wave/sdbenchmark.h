@@ -1,6 +1,3 @@
-#include "../chibios/ext/fatfs/src/ff.h"
-#include "../chibios/os/various/chprintf.c"
-
 #define SDREADFILEPINGPONGSIZE 2048
 typedef struct {
   union {
@@ -80,7 +77,7 @@ void BenchmarkBS(int bufsize, int nstreams){
   for(i=0;i<nstreams;i++){
     sdReadFilePingpong *s = (sdReadFilePingpong*)(0x20000000 | (int)&sdStreams[i]);
     err = f_close(&s->f);
-    if (err) reportFError(err); 
+    if (err) reportFError(err);
   }
   // open for read
   int t3 = chTimeNow();
@@ -100,7 +97,7 @@ void BenchmarkBS(int bufsize, int nstreams){
     for(i=0;i<nstreams;i++){
       sdReadFilePingpong *s = (sdReadFilePingpong*)(0x20000000 | (int)&sdStreams[i]);
       err = f_read(&s->f, s->fbuff0.i8buff, bufsize, &bytes_read);
-      if (err) reportFError(err); 
+      if (err) reportFError(err);
     }
   }
   int t5 = chTimeNow();
