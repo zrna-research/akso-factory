@@ -1,0 +1,65 @@
+<objdefs>
+   <obj.normal id="output-left">
+      <sDescription>TRS Output 2 (Left) Configuration</sDescription>
+      <author>nsm</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs>
+         <combo name="mode">
+            <MenuEntries>
+               <string>Mono (Left)</string>
+               <string>Stereo</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0</string>
+               <string>1</string>
+            </CEntries>
+         </combo>
+         <combo name="ring_mode">
+            <MenuEntries>
+               <string>Balanced</string>
+               <string>Unbalanced</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0</string>
+               <string>1</string>
+            </CEntries>
+         </combo>
+         <combo name="scale">
+            <MenuEntries>
+               <string>Line Level</string>
+               <string>CV</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0</string>
+               <string>1</string>
+            </CEntries>
+         </combo>
+         <combo name="cv_bias">
+            <MenuEntries>
+               <string>Bipolar (-5 to +5V)</string>
+               <string>Unipolar (0 to +10V)</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0</string>
+               <string>1</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <depends>
+      </depends>
+      <code.init><![CDATA[
+          palWritePad(OUT2_STR_EN_PORT, OUT2_STR_EN_PIN,
+            attr_mode ? OUT2_STR_ENABLED : OUT2_STR_DISABLED);
+          palWritePad(OUT2_BAL_EN_PORT, OUT2_BAL_EN_PIN,
+                (!attr_mode && !attr_ring__mode) ? BAL_ENABLED : BAL_DISABLED);
+          palWritePad(OUT2_SCALE_PORT, OUT2_SCALE_PIN,
+                attr_scale ? OUT_SCALE_CV : OUT_SCALE_LINE_LEVEL);
+          palWritePad(OUT1_BIAS_SEL_PORT, OUT2_BIAS_SEL_PIN,
+                (attr_scale && attr_cv__bias) ? BIAS_UNIPOLAR : BIAS_BIPOLAR);
+]]></code.init>
+   </obj.normal>
+</objdefs>

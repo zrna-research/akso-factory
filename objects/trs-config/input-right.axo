@@ -1,0 +1,77 @@
+<objdefs>
+   <obj.normal id="input-right">
+      <sDescription>TRS Input Right (IN1) Configuration</sDescription>
+      <author>nsm</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs>
+         <combo name="mode">
+            <MenuEntries>
+               <string>Mono (Right)</string>
+               <string>Aux Stereo</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0</string>
+               <string>1</string>
+            </CEntries>
+         </combo>
+         <combo name="input_signal">
+            <MenuEntries>
+               <string>Differential</string>
+               <string>Single-ended</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0</string>
+               <string>1</string>
+            </CEntries>
+         </combo>
+         <combo name="scale">
+            <MenuEntries>
+               <string>Line Level</string>
+               <string>CV</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0</string>
+               <string>1</string>
+            </CEntries>
+         </combo>
+         <combo name="cv_bias">
+            <MenuEntries>
+               <string>Bipolar (-5 to +5V)</string>
+               <string>Unipolar (0 to +10V)</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0</string>
+               <string>1</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <depends>
+      </depends>
+      <code.init><![CDATA[
+          palWritePad(IN1_MODE_PORT, IN1_MODE_PIN,
+                attr_mode ? IN1_MODE_AUX : IN1_MODE_MONO);
+          palWritePad(IN1_SCALE_PORT, IN1_SCALE_PIN,
+                attr_scale ? IN_SCALE_CV : IN_SCALE_LINE_LEVEL);
+          palWritePad(IN1_BIAS_SEL_PORT, IN1_BIAS_SEL_PIN,
+                (attr_scale && attr_cv__bias) ? BIAS_UNIPOLAR : BIAS_BIPOLAR);
+
+          if(attr_input__signal || attr_mode || (attr_scale && attr_cv__bias)) {
+              // go into single-ended mode if:
+              // - requested
+              // - in aux mode
+              // - unipolar cv mode
+              ADAU1961_WriteRegister(0x400C, 0b1010001); // mixer2 enable, unmute RINP
+              ADAU1961_WriteRegister(0x400D, 0x00); // mute PGA, aux mute, 0 dB boost
+          } else {
+              // differential mode, pga enabled
+              ADAU1961_WriteRegister(0x400C, 0x01); // mixer2 enable, mute RINP and RINR
+              ADAU1961_WriteRegister(0x400D, 0x08); // unmute PGA, aux mute, 0 dB boost
+          }
+
+]]></code.init>
+   </obj.normal>
+</objdefs>

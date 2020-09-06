@@ -59,18 +59,6 @@
                <string>2</string>
             </CEntries>
          </combo>
-         <combo name="mode">
-            <MenuEntries>
-               <string>Stereo</string>
-               <string>Mono(L)</string>
-               <string>Balanced(L)</string>
-            </MenuEntries>
-            <CEntries>
-               <string>A_STEREO</string>
-               <string>A_MONO</string>
-               <string>A_BALANCED</string>
-            </CEntries>
-         </combo>
       </attribs>
       <depends>
          <depend>ADAU1361</depend>
@@ -79,7 +67,6 @@
 ADAU1961_WriteRegister(0x400F,(attr_gain<<2)+3);
 ADAU1961_WriteRegister(0x400B,(attr_boost<<3)+0);
 ADAU1961_WriteRegister(0x400D,(attr_boost<<3)+0);
-AudioInputMode = attr_mode;
 ]]></code.init>
    </obj.normal>
 </objdefs>

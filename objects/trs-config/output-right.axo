@@ -1,0 +1,61 @@
+<objdefs>
+   <obj.normal id="output-right">
+      <sDescription>TRS Output 1 (Right) Configuration</sDescription>
+      <author>nsm</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs>
+         <combo name="mode">
+            <MenuEntries>
+               <string>Mono (Fixed)</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0</string>
+            </CEntries>
+         </combo>
+         <combo name="ring_mode">
+            <MenuEntries>
+               <string>Balanced</string>
+               <string>Unbalanced</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0</string>
+               <string>1</string>
+            </CEntries>
+         </combo>
+         <combo name="scale">
+            <MenuEntries>
+               <string>Line Level</string>
+               <string>CV</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0</string>
+               <string>1</string>
+            </CEntries>
+         </combo>
+         <combo name="cv_bias">
+            <MenuEntries>
+               <string>Bipolar (-5 to +5V)</string>
+               <string>Unipolar (0 to +10V)</string>
+            </MenuEntries>
+            <CEntries>
+               <string>0</string>
+               <string>1</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <depends>
+      </depends>
+      <code.init><![CDATA[
+          palWritePad(OUT1_BAL_EN_PORT, OUT1_BAL_EN_PIN,
+                attr_ring__mode ? BAL_DISABLED : BAL_ENABLED);
+          palWritePad(OUT1_SCALE_PORT, OUT1_SCALE_PIN,
+                attr_scale ? OUT_SCALE_CV : OUT_SCALE_LINE_LEVEL);
+          palWritePad(OUT1_BIAS_SEL_PORT, OUT1_BIAS_SEL_PIN,
+                (attr_scale && attr_cv__bias) ? BIAS_UNIPOLAR : BIAS_BIPOLAR);
+]]></code.init>
+   </obj.normal>
+</objdefs>

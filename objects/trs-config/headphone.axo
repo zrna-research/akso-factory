@@ -1,8 +1,7 @@
 <objdefs>
-   <obj.normal id="outconfig" uuid="eace67e3304afaa1bb695b444e9345f2d8adaf00" sha="131a98d9122529e20f3148bd5b1f557c87e78dfb">
-      <upgradeSha>6bcf773ffb1cc3d890cc9725fdb62924ae7deb62</upgradeSha>
-      <sDescription>Audio output configuration)</sDescription>
-      <author>Johannes Taelman</author>
+   <obj.normal id="headphone">
+      <sDescription>Headphone Jack Level Configuration</sDescription>
+      <author>nsm</author>
       <license>BSD</license>
       <inlets/>
       <outlets/>
