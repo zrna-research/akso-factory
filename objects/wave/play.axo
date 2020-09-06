@@ -23,9 +23,8 @@
    sdReadFilePingpong *stream;
    int starttrig;
    int stoptrig;]]></code.declaration>
-      <code.init><![CDATA[static sdReadFilePingpong s[attr_poly] __attribute__ ((section (".data")));
-// unmap from aliased memory for DMA
-stream = (sdReadFilePingpong *)(0x20000000 | (int)&s[parent->polyIndex]);
+      <code.init><![CDATA[static sdReadFilePingpong s[attr_poly] SDMMC_MEM_FW;
+stream = &s[parent->polyIndex];
 stream->pingpong = CLOSED;
 stream->doSeek = 0;
 stream->offset = -1;
@@ -50,7 +49,10 @@ outlet_end = 0;
      int16_t *p = 0;
      int16_t *q = 0;
      p=sdReadStream(stream);
+     SCB_InvalidateICache();
+     SCB_CleanInvalidateDCache();
      if (p) {
+
         for(i=0;i<BUFSIZE;i++){
            outlet_out[i] = (*(p++))<<10;
         }

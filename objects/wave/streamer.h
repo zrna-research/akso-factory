@@ -75,6 +75,8 @@ static THD_FUNCTION(ThreadSD, arg) {
           chSysDisable();
           if (s->pingpong != CLOSING)
             s->pingpong = PLAYA_READB;
+          SCB_InvalidateICache();
+          SCB_CleanInvalidateDCache();
           chSysEnable();
         }
         busy = 1;
@@ -91,6 +93,8 @@ static THD_FUNCTION(ThreadSD, arg) {
         chSysDisable();
         if (s->pingpong != CLOSING)
           s->pingpong = RECB;
+        SCB_InvalidateICache();
+        SCB_CleanInvalidateDCache();
         chSysEnable();
         LogTextMessage("rec : open ok");
         busy = 1;
@@ -122,6 +126,8 @@ static THD_FUNCTION(ThreadSD, arg) {
         chSysDisable();
         if (s->pingpong != CLOSING)
           s->pingpong = PLAYA_READB;
+        SCB_InvalidateICache();
+        SCB_CleanInvalidateDCache();
         chSysEnable();
         busy = 1;
       }
@@ -136,11 +142,15 @@ static THD_FUNCTION(ThreadSD, arg) {
           if ((err != FR_OK) || (bytes_read != SDREADFILEPINGPONGSIZE * 4)) {
             s->pingpong = CLOSING;
           }
+          SCB_InvalidateICache();
+          SCB_CleanInvalidateDCache();
           chSysEnable();
         }
         else {
           chSysDisable();
           s->pingpong = CLOSING;
+          SCB_InvalidateICache();
+          SCB_CleanInvalidateDCache();
           chSysEnable();
         }
         busy = 1;
@@ -153,6 +163,8 @@ static THD_FUNCTION(ThreadSD, arg) {
           chSysDisable();
           if (s->pingpong == PLAYA_READB)
             s->pingpong = PLAYA;
+          SCB_InvalidateICache();
+          SCB_CleanInvalidateDCache();
           chSysEnable();
           if ((err != FR_OK) || (bytes_read != SDREADFILEPINGPONGSIZE * 4)) {
             s->pingpong = CLOSING;
@@ -161,6 +173,8 @@ static THD_FUNCTION(ThreadSD, arg) {
         else {
           chSysDisable();
           s->pingpong = CLOSING;
+          SCB_InvalidateICache();
+          SCB_CleanInvalidateDCache();
           chSysEnable();
         }
         busy = 1;
@@ -171,6 +185,8 @@ static THD_FUNCTION(ThreadSD, arg) {
         chSysDisable();
         if (s->pingpong == RECB_WRITEA)
           s->pingpong = RECB;
+        SCB_InvalidateICache();
+        SCB_CleanInvalidateDCache();
         chSysEnable();
         if (err != FR_OK) {
           s->pingpong = CLOSINGREC;
@@ -183,12 +199,20 @@ static THD_FUNCTION(ThreadSD, arg) {
         chSysDisable();
         if (s->pingpong == RECA_WRITEB)
           s->pingpong = RECA;
+        SCB_InvalidateICache();
+        SCB_CleanInvalidateDCache();
         chSysEnable();
         if (err != FR_OK) {
           s->pingpong = CLOSINGREC;
         }
         busy = 1;
       }
+
+//      if(busy) {
+//          chSysDisable();
+//          SCB_CleanInvalidateDCache();
+//          chSysEnable();
+//      }
       //}
     } while ((busy != 0)&&!chThdShouldTerminate());
     if (!chThdShouldTerminate())
@@ -225,6 +249,7 @@ __INL int16_t *sdReadStream(sdReadFilePingpong *s) {
       s->offset = 0;
       chEvtSignal(s->pThreadSD, (eventmask_t)1);
     }
+
   }
   else if ((s->pingpong == PLAYA_READB) || (s->pingpong == PLAYA)) {
     p = &s->fbuff0.i16buff[s->offset];

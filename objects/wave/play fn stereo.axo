@@ -21,14 +21,13 @@
       <includes>
          <include>./streamer.h</include>
       </includes>
-      <code.declaration><![CDATA[WORKING_AREA(waThreadSD, 800);
+      <code.declaration><![CDATA[THD_WORKING_AREA(waThreadSD, 800);
    sdReadFilePingpong *stream;
    int starttrig;
    int stoptrig;
    char c[64];]]></code.declaration>
-      <code.init><![CDATA[static sdReadFilePingpong s[attr_poly] __attribute__ ((section (".data")));
-// unmap from aliased memory for DMA
-stream = (sdReadFilePingpong *)(0x20000000 | (int)&s[parent->polyIndex]);
+      <code.init><![CDATA[static sdReadFilePingpong s[attr_poly] SDMMC_MEM_FW;
+stream = &s[parent->polyIndex];
 stream->pingpong = CLOSED;
 stream->doSeek = 0;
 stream->offset = -1;
@@ -55,6 +54,9 @@ outlet_end = 0;
      int16_t *q = 0;
      p=sdReadStream(stream);
      q=sdReadStream(stream);
+     SCB_InvalidateICache();
+     SCB_CleanInvalidateDCache();
+
      if (p && q) {
         for(i=0;i<BUFSIZE/2;i++){
            outlet_outl[i] = (*(p++))<<10;

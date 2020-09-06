@@ -131,7 +131,7 @@ static msg_t ThreadBenchmarkSD(void *arg) {
   LogTextMessage("SDCard benchmark finished.");
 }
 
-static WORKING_AREA(waThreadSD0, 1024) __attribute__ ((section (".data")));
+static WORKING_AREA(waThreadSD0, 1024);
 
 void sdbenchmark(void){
   sdStreams[0].pThreadSD = chThdCreateStatic(waThreadSD0, sizeof(waThreadSD0), NORMALPRIO, ThreadBenchmarkSD, NULL);
