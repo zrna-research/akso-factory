@@ -14,12 +14,15 @@
       <code.init><![CDATA[// setup the pins
 palSetPadMode(GPIOB, 8, PAL_MODE_ALTERNATE(4)|PAL_STM32_PUDR_PULLUP|PAL_STM32_OTYPE_OPENDRAIN);// SCL
 palSetPadMode(GPIOB, 9, PAL_MODE_ALTERNATE(4)|PAL_STM32_PUDR_PULLUP|PAL_STM32_OTYPE_OPENDRAIN);// SDA
-static const I2CConfig i2cfg = {
-    OPMODE_I2C,
-    400000,
-    FAST_DUTY_CYCLE_2,
+static const I2CConfig i2cconfig = {
+// see RM0433 for TIMINGR configuration values
+  STM32_TIMINGR_PRESC(5)  |
+  STM32_TIMINGR_SCLDEL(3U) | STM32_TIMINGR_SDADEL(3U) |
+  STM32_TIMINGR_SCLH(3U)   | STM32_TIMINGR_SCLL(9U),
+  0,
+  0
 };
-i2cStart(&I2CD1, &i2cfg);
+i2cStart(&I2CD1, &i2cconfig);
 ]]></code.init>
       <code.dispose><![CDATA[i2cStop(&I2CD1);
 palSetPadMode(GPIOB, 8, PAL_MODE_INPUT_ANALOG);

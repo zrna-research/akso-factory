@@ -19,15 +19,15 @@
          <text name="script"/>
       </attribs>
       <code.declaration><![CDATA[int32_t in1,in2;
-int32_t out1,out2;
-msg_t ThreadX2(){
-attr_script
+int32_t out1, out2;
+static THD_FUNCTION(ThreadX2, arg) {
+       attr_script
 }
-static msg_t ThreadX(void *arg) {
-((attr_parent *)arg)->ThreadX2();
+static THD_FUNCTION(ThreadX, arg) {
+       ((attr_parent *)arg)->ThreadX2(arg);
 }
-WORKING_AREA(waThreadX, 1024);
-Thread *Thd;
+THD_WORKING_AREA(waThreadX, 1024);
+thread_t *Thd;
 ]]></code.declaration>
       <code.init><![CDATA[in1=0;in2=0;out1=0;out2=0;
   Thd = chThdCreateStatic(waThreadX, sizeof(waThreadX),

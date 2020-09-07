@@ -74,7 +74,7 @@ palSetPadMode(GPIOA, 5, PAL_MODE_ALTERNATE(5));// SCK
 palSetPadMode(GPIOA, 6, PAL_MODE_ALTERNATE(5));// MISO
 palSetPadMode(GPIOA, 7, PAL_MODE_ALTERNATE(5));// MOSI
 static const SPIConfig spicfg =
-    {NULL, GPIOA, 4, 0 attr_clock__polarity attr_clock__phase attr_baudrate attr_format};
+    {false, NULL, GPIOA, 4, 0 attr_clock__polarity attr_clock__phase attr_baudrate attr_format};
 spiStart(&SPID1, &spicfg);
 ]]></code.init>
       <code.dispose><![CDATA[spiStop(&SPID1);

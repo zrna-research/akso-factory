@@ -14,14 +14,14 @@
       <attribs/>
       <code.init><![CDATA[palSetPadMode(GPIOA, 4, PAL_MODE_INPUT_ANALOG);
 palSetPadMode(GPIOA, 5, PAL_MODE_INPUT_ANALOG);
-RCC->APB1ENR |= 0x20000000;
-DAC->CR |= 0x00030003;
+rccEnableDAC1(false);
+DAC1->CR |= 0b10000000000000001;
 ]]></code.init>
-      <code.dispose><![CDATA[DAC->CR = 0x0;
-RCC->APB1ENR &= ~0x20000000;
+      <code.dispose><![CDATA[DAC1->CR = 0x0;
+rccDisableDAC1();
 ]]></code.dispose>
-      <code.krate><![CDATA[DAC->DHR12R1 = inlet_PA4>>15;
-DAC->DHR12R2 = inlet_PA5>>15;
+      <code.krate><![CDATA[DAC1->DHR12R1 = inlet_PA4>>15;
+DAC1->DHR12R2 = inlet_PA5>>15;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

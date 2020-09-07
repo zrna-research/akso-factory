@@ -43,12 +43,19 @@
                <string>9</string>
                <string>10</string>
                <string>11</string>
-               <string>12</string>
                <string>13</string>
                <string>14</string>
+               <string>12</string>
             </CEntries>
          </combo>
       </attribs>
-      <code.krate><![CDATA[outlet_out= adcvalues[attr_channel]<<15;]]></code.krate>
+      <code.krate><![CDATA[
+      if(attr_channel <= 12) {
+          outlet_out = adcvalues[attr_channel] << 15;
+      } else {
+          outlet_out = adc3values[attr_channel - 13] << 15;
+      }
+
+]]></code.krate>
    </obj.normal>
 </objdefs>
